@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # Test service with volume mounts to workspace paths
+  web-service:
+    build: .
+    volumes:
+      # These paths should be scanned for dependency files
+      - ./frontend-workspace:/app/frontend
+      - ./backend-workspace:/app/backend
+      - ../shared-libs:/app/shared
+      - ./config-workspace:/app/config
+    environment:
+      - NODE_ENV=development
+
+  # Another service for additional testing
+  api-service:
+    image: python:3.9
+    volumes:
+      # More workspace paths to test
+      - ./python-workspace:/app/python
+      - ./rust-workspace:/app/rust
+    command: python app.py
